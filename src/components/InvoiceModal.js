@@ -18,7 +18,6 @@ class InvoiceModal extends React.Component {
   }
   
   UpdateInvoice = () => {
-    console.log("something2", this.props)
     this.props.updateInvoice({
       id: this.props.id,
       info: this.props.info, 
@@ -33,7 +32,6 @@ class InvoiceModal extends React.Component {
   }
 
   GenerateInvoice = () => {
-    // console.log(this.props)
     this.props.addInvoice({
       info: this.props.info, 
       items: this.props.items,
