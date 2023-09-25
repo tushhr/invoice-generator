@@ -13,8 +13,10 @@ export default function Home() {
 
     return (
         <div>
-            <Button variant="primary" type="submit" className="d-block" onClick={() => setInvoice(-1)}>Create a New Invoice</Button>
-
+            <div className="header">
+                <Button variant="primary" type="submit" className="d-block" onClick={() => setInvoice(-1)}>Create a New Invoice</Button>
+                {invoice && <Button variant="primary" type="submit" className="d-block" onClick={() => setInvoice(null)}>Home</Button>}
+            </div>
             { !invoice && 
                 <table class="invoice-table">
                 <thead>
@@ -25,6 +27,7 @@ export default function Home() {
                         <th class="invoice-table__col-head invoice-table__col-head--right-align">Date</th>
                         <th class="invoice-table__col-head invoice-table__col-head--right-align">Total Amount</th>
                         <th class="invoice-table__col-head invoice-table__col-head--right-align"></th>
+                        <th class="invoice-table__col-head invoice-table__col-head--right-align"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,11 +36,11 @@ export default function Home() {
                             <tr key={invoice.id}>
                                 <td class="invoice-table__row invoice-table__row--active">{invoice.info.invoiceNumber}</td>
                                 <td class="invoice-table__row"> {invoice.info.billFrom}</td>
-                                <td class="invoice-table__row invoice-table__row--center-align">{invoice.info.billTo}</td>
-                                <td class="invoice-table__row invoice-table__row--right-align">{invoice.info.dateOfIssue}</td>
-                                <td class="invoice-table__row invoice-table__row--right-align">{invoice.info.total}</td>
-                                <td class="invoice-table__row invoice-table__row--right-align" onClick={() =>  setInvoice(invoice)}><Button variant="primary" type="submit" className="d-block w-100">Edit</Button></td>
-                                <td class="invoice-table__row invoice-table__row--right-align" onClick={() =>   dispatch(removeInvoice(invoice.id))}><Button variant="primary" type="submit" className="d-block w-100">Delete</Button></td>
+                                <td class="invoice-table__row">{invoice.info.billTo}</td>
+                                <td class="invoice-table__row">{invoice.info.dateOfIssue}</td>
+                                <td class="invoice-table__row">{invoice.info.total}</td>
+                                <td class="invoice-table__row" onClick={() =>  setInvoice(invoice)}><Button variant="primary" type="submit" className="d-block w-100">Edit</Button></td>
+                                <td class="invoice-table__row" onClick={() =>  dispatch(removeInvoice(invoice.id))}><Button variant="primary" type="submit" className="d-block w-100">Delete</Button></td>
                             </tr>
                         )
                     })}
