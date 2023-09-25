@@ -8,28 +8,58 @@ import Modal from 'react-bootstrap/Modal';
 import { BiPaperPlane, BiCloudDownload } from "react-icons/bi";
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf'
+import { connect } from "react-redux";
+import { addInvoice, updateInvoice } from "../store/invoiceStore";
 
-function GenerateInvoice() {
-  html2canvas(document.querySelector("#invoiceCapture")).then((canvas) => {
-    const imgData = canvas.toDataURL('image/png', 1.0);
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'pt',
-      format: [612, 792]
-    });
-    pdf.internal.scaleFactor = 1;
-    const imgProps= pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save('invoice-001.pdf');
-  });
-}
 
 class InvoiceModal extends React.Component {
   constructor(props) {
     super(props);
   }
+  
+  UpdateInvoice = () => {
+    console.log("something2", this.props)
+    this.props.updateInvoice({
+      id: this.props.id,
+      info: this.props.info, 
+      items: this.props.items,
+      currency: this.props.currency,
+      total: this.props.total,
+      subtotal: this.props.subTotal, 
+      taxAmmount: this.props.taxAmmount, 
+      discountAmmount: this.props.discountAmmount,
+      updateModal: this.props.updateModal,
+    })
+  }
+
+  GenerateInvoice = () => {
+    // console.log(this.props)
+    this.props.addInvoice({
+      info: this.props.info, 
+      items: this.props.items,
+      currency: this.props.currency,
+      total: this.props.total,
+      subtotal: this.props.subTotal, 
+      taxAmmount: this.props.taxAmmount, 
+      discountAmmount: this.props.discountAmmount,
+      updateModal: this.props.updateModal,
+    })
+    // html2canvas(document.querySelector("#invoiceCapture")).then((canvas) => {
+    //   const imgData = canvas.toDataURL('image/png', 1.0);
+    //   const pdf = new jsPDF({
+    //     orientation: 'portrait',
+    //     unit: 'pt',
+    //     format: [612, 792]
+    //   });
+    //   pdf.internal.scaleFactor = 1;
+    //   const imgProps= pdf.getImageProperties(imgData);
+    //   const pdfWidth = pdf.internal.pageSize.getWidth();
+    //   const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    //   pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    //   pdf.save('invoice-001.pdf');
+    // });
+  }
+
   render() {
     return(
       <div>
@@ -134,12 +164,21 @@ class InvoiceModal extends React.Component {
           <div className="pb-4 px-4">
             <Row>
               <Col md={6}>
-                <Button variant="primary" className="d-block w-100" onClick={GenerateInvoice}>
-                  <BiPaperPlane style={{width: '15px', height: '15px', marginTop: '-3px'}} className="me-2"/>Send Invoice
-                </Button>
+                {
+                  this.props.updateModal && 
+                  <Button variant="primary" className="d-block w-100" onClick={this.UpdateInvoice}>
+                    <BiPaperPlane style={{width: '15px', height: '15px', marginTop: '-3px'}} className="me-2"/>Update the Invoice
+                  </Button>
+                }
+                {
+                  !this.props.updateModal && 
+                  <Button variant="primary" className="d-block w-100" onClick={this.GenerateInvoice}>
+                    <BiPaperPlane style={{width: '15px', height: '15px', marginTop: '-3px'}} className="me-2"/>Send Invoice
+                  </Button>
+                }
               </Col>
               <Col md={6}>
-                <Button variant="outline-primary" className="d-block w-100 mt-3 mt-md-0" onClick={GenerateInvoice}>
+                <Button variant="outline-primary" className="d-block w-100 mt-3 mt-md-0" onClick={this.GenerateInvoice}>
                   <BiCloudDownload style={{width: '16px', height: '16px', marginTop: '-3px'}} className="me-2"/>
                   Download Copy
                 </Button>
@@ -153,4 +192,6 @@ class InvoiceModal extends React.Component {
   }
 }
 
-export default InvoiceModal;
+const mapDispatchToProps = { addInvoice, updateInvoice }
+
+export default connect(null, mapDispatchToProps)(InvoiceModal);

@@ -14,25 +14,28 @@ class InvoiceForm extends React.Component {
     super(props);
     this.state = {
       isOpen: false,
-      currency: '$',
-      currentDate: '',
-      invoiceNumber: 1,
-      dateOfIssue: '',
-      billTo: '',
-      billToEmail: '',
-      billToAddress: '',
-      billFrom: '',
-      billFromEmail: '',
-      billFromAddress: '',
-      notes: '',
-      total: '0.00',
-      subTotal: '0.00',
-      taxRate: '',
-      taxAmmount: '0.00',
-      discountRate: '',
-      discountAmmount: '0.00'
+      currency: this.props.currency ?? '$',
+    }
+    this.state = {...this.props.info} ??
+      {
+        currentDate: '',
+        invoiceNumber: 1,
+        dateOfIssue: '',
+        billTo: '',
+        billToEmail: '',
+        billToAddress: '',
+        billFrom: '',
+        billFromEmail: '', 
+        billFromAddress: '', 
+        notes: '',
+        total: '0.00', 
+        subTotal: '0.00',
+        taxRate: '',  
+        taxAmmount: '0.00',
+        discountRate: '',
+        discountAmmount: '0.00',
     };
-    this.state.items = [
+    this.state.items = this.props.items ?? [
       {
         id: 0,
         name: '',
@@ -41,6 +44,8 @@ class InvoiceForm extends React.Component {
         quantity: 1
       }
     ];
+    this.state.updateInvoice = this.props.updateInvoice ?? false;
+    this.state.id = this.props.id ?? null;
     this.editField = this.editField.bind(this);
   }
   componentDidMount(prevProps) {
@@ -206,7 +211,19 @@ class InvoiceForm extends React.Component {
         <Col md={4} lg={3}>
           <div className="sticky-top pt-md-3 pt-xl-4">
             <Button variant="primary" type="submit" className="d-block w-100">Review Invoice</Button>
-            <InvoiceModal showModal={this.state.isOpen} closeModal={this.closeModal} info={this.state} items={this.state.items} currency={this.state.currency} subTotal={this.state.subTotal} taxAmmount={this.state.taxAmmount} discountAmmount={this.state.discountAmmount} total={this.state.total}/>
+            <InvoiceModal 
+              id = {this.state.id}
+              showModal={this.state.isOpen}
+              closeModal={this.closeModal}
+              info={this.state}
+              items={this.state.items}
+              currency={this.state.currency}
+              subTotal={this.state.subTotal}
+              taxAmmount={this.state.taxAmmount}
+              discountAmmount={this.state.discountAmmount} 
+              total={this.state.total}
+              updateModal={this.state.updateInvoice}
+            />
             <Form.Group className="mb-3">
               <Form.Label className="fw-bold">Currency:</Form.Label>
               <Form.Select onChange={event => this.onCurrencyChange({currency: event.target.value})} className="btn btn-light my-1" aria-label="Change Currency">
