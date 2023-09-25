@@ -9,7 +9,8 @@ body,
 html,
 #root,
 .App {
-  min-height: 100vh
+  min-height: 100vh;
+  margin-top: 2rem;
 }
 .btn {
   font-size: 0.9rem;
@@ -85,4 +86,46 @@ hr {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.header {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.invoice-table {
+  width: 100%;
+  border-spacing: 0;
+  background-color: #ffffff;
+  border-radius: 0.756rem;
+  outline: 0.1rem solid rgba(0,0,0,.125);
+  overflow: hidden;
+  margin-top: 2.25rem;
+}
+
+.invoice-table__col-head {
+  padding: 1rem 1.2rem;
+  font-weight: 600;
+  color: rgba(77, 77, 77, 1);
+  background-color: #f5f7f9;
+  box-shadow: 0 .1rem .1rem rgba(0,0,0,.05)!important
+}
+
+.invoice-table__col-head, .invoice-table__row {
+  text-align: center;
+}
+
+.invoice-table__row {
+  padding: 1.4rem 1.2rem;
+  color: rgba(77, 77, 77, 1);
+  max-width: 12rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.invoice-table__row--active {
+  color: #0b5ed7;
+  font-weight: 500;
 }

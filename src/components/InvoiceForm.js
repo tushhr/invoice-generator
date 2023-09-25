@@ -127,10 +127,10 @@ class InvoiceForm extends React.Component {
   };
   closeModal = (event) => this.setState({isOpen: false});
   render() {
-    return (<Form onSubmit={this.openModal}>
+    return (<Form onSubmit={this.openModal} className='my-xl-4'>
       <Row>
         <Col md={8} lg={9}>
-          <Card className="p-4 p-xl-5 my-3 my-xl-4">
+          <Card className="p-4 p-xl-5 my-3">
             <div className="d-flex flex-row align-items-start justify-content-between mb-3">
               <div class="d-flex flex-column">
                 <div className="d-flex flex-column">
@@ -209,7 +209,7 @@ class InvoiceForm extends React.Component {
           </Card>
         </Col>
         <Col md={4} lg={3}>
-          <div className="sticky-top pt-md-3 pt-xl-4">
+          <div className="sticky-top pt-md-3">
             <Button variant="primary" type="submit" className="d-block w-100">Review Invoice</Button>
             <InvoiceModal 
               id = {this.state.id}
