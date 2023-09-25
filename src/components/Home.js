@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from 'react-bootstrap/Button';
 
+import { removeInvoice } from "../store/invoiceStore";
 import InvoiceForm from "./InvoiceForm";
 
 export default function Home() {
     const [invoice, setInvoice] = useState(null)
+    const dispatch = useDispatch()
 
     const invoiceList = useSelector(store => store.invoice.invoiceList)
 
@@ -35,6 +37,7 @@ export default function Home() {
                                 <td class="invoice-table__row invoice-table__row--right-align">{invoice.info.dateOfIssue}</td>
                                 <td class="invoice-table__row invoice-table__row--right-align">{invoice.info.total}</td>
                                 <td class="invoice-table__row invoice-table__row--right-align" onClick={() =>  setInvoice(invoice)}><Button variant="primary" type="submit" className="d-block w-100">Edit</Button></td>
+                                <td class="invoice-table__row invoice-table__row--right-align" onClick={() =>   dispatch(removeInvoice(invoice.id))}><Button variant="primary" type="submit" className="d-block w-100">Delete</Button></td>
                             </tr>
                         )
                     })}
