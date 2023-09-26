@@ -61,7 +61,6 @@ class InvoiceModal extends React.Component {
 
   GenerateInvoice = () => {
     const isValidData = this.validateData()
-
     if(!isValidData) {
       this.setState({
         toast: {
@@ -70,6 +69,7 @@ class InvoiceModal extends React.Component {
           text: 'Some error occured, possibly redundant invoice number or no invoice number',
         }
       })
+      return;
     }
 
     if(this.props.invoiceAction === INVOICE_ACTIONS.NEW_INVOICE) {
