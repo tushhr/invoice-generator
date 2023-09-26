@@ -123,6 +123,10 @@ hr {
   box-shadow: 0 .1rem .1rem rgba(0,0,0,.05)!important
 }
 
+.invoice-table__col-head i {
+  margin-left: 0.3rem;
+}
+
 .invoice-table__col-head, .invoice-table__row {
   text-align: center;
 }

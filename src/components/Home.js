@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from 'react-bootstrap/Button';
 
@@ -6,10 +6,101 @@ import { removeInvoice } from "../store/invoiceStore";
 import InvoiceForm from "./InvoiceForm";
 
 export default function Home() {
+    const invoiceListStore = useSelector(store => store.invoice.invoiceList)
+    const [invoiceList, setInvoiceList] = useState(invoiceListStore)
     const [invoice, setInvoice] = useState(null)
+    const [tableHeader, setTableHeader] = useState([
+        {
+            title: "Invoice",
+            icon: "fa-chevron-down",
+        },
+        {
+            title: "From",
+            icon: "fa-chevron-down",
+        },
+        {
+            title: "To",
+            icon: "fa-chevron-down",
+        },
+        {
+            title: "Date",
+            icon: "fa-chevron-down",
+        },
+        {
+            title: "Total Amount",
+            icon: "fa-chevron-down",
+        },
+                {
+            title: "",
+            icon: "",
+        },
+        {
+            title: "",
+            icon: "",
+        }
+    ])
+
+    const nameToKey = {
+        'invoice': 'invoiceNumber',
+        'from': 'billFrom',
+        'to': 'billTo',
+        'date': 'dateOfIssue',
+        'total amount': 'total',
+    }
+
     const dispatch = useDispatch()
 
-    const invoiceList = useSelector(store => store.invoice.invoiceList)
+    const sortByInt = (array, name) => {
+        const key = nameToKey[name]
+        const newInvoiceList = [...array].sort((a, b) =>  a.info[key] - b.info[key]);
+
+        return newInvoiceList
+    }
+
+    const sortByString = (array, name) => {
+        const key = nameToKey[name]
+        const newInvoiceList = [...array].sort((a, b) => a.info[key].localeCompare(b.info[key]));
+
+        return newInvoiceList;
+    }
+
+    const sortByDate = (array, name) => {
+        const key = nameToKey[name]
+        const newInvoiceList = [...array].sort((a, b) => new Date(a.info[key]) - new Date(b.info[key]));
+        console.log(newInvoiceList)
+        return newInvoiceList
+    }
+
+    const handleSorting = (index, sortOrder) => {
+        const colHeader = tableHeader[index].title.toLowerCase()
+        let newInvoiceList = invoiceList;
+
+        if(colHeader === "invoice" || colHeader === "total amount") {
+            newInvoiceList = sortByInt(invoiceList, colHeader)
+        } else if(colHeader === "from" || colHeader === "to") {
+            newInvoiceList = sortByString(invoiceList, colHeader)
+        } else if(colHeader === "date") {
+            newInvoiceList = sortByDate(invoiceList, colHeader)
+        }
+
+        sortOrder === 1 ? setInvoiceList(newInvoiceList) : setInvoiceList(newInvoiceList.reverse());
+    }
+
+    const handleSortingClick = (index) => {
+        const newTableHeader = [...tableHeader]
+        if (newTableHeader[index].icon === "fa-chevron-down") {
+            newTableHeader[index].icon = "fa-chevron-up"
+            handleSorting(index, 1)
+        } else if (newTableHeader[index].icon === "fa-chevron-up") {
+            newTableHeader[index].icon = "fa-chevron-down"
+            handleSorting(index, -1)
+        }
+        setTableHeader(newTableHeader)
+    }
+
+    useEffect(() => {
+        setInvoiceList(invoiceListStore)
+    }, [invoiceListStore])
 
     return (
         <div>
@@ -21,27 +112,26 @@ export default function Home() {
                 <table className="invoice-table">
                 <thead>
                     <tr>
-                        <th className="invoice-table__col-head invoice-table__col-head--left-align">Invoice</th>
-                        <th className="invoice-table__col-head invoice-table__col-head--left-align">From</th>
-                        <th className="invoice-table__col-head">To</th>
-                        <th className="invoice-table__col-head invoice-table__col-head--right-align">Date</th>
-                        <th className="invoice-table__col-head invoice-table__col-head--right-align">Total Amount</th>
-                        <th className="invoice-table__col-head invoice-table__col-head--right-align"></th>
-                        <th className="invoice-table__col-head invoice-table__col-head--right-align"></th>
+                        {tableHeader.map((header, index) => 
+                            <th className="invoice-table__col-head invoice-table__col-head--left-align">
+                                {header.title}
+                                <i className={"fa " + header.icon} onClick={() => handleSortingClick(index)}></i>
+                            </th>
+                        )}
                     </tr>
                 </thead>
                 <tbody>
-                    {invoiceList.map((invoice) => {
+                    {invoiceList.map((invoice, index) => {
                         return (
                             <tr key={invoice.id}>
                                 <td className="invoice-table__row invoice-table__row--active">{invoice.info.invoiceNumber}</td>
                                 <td className="invoice-table__row"> {invoice.info.billFrom}</td>
                                 <td className="invoice-table__row">{invoice.info.billTo}</td>
                                 <td className="invoice-table__row">{invoice.info.dateOfIssue}</td>
-                                <td className="invoice-table__row">{invoice.info.total}</td>
+                                <td className="invoice-table__row">{invoice.currency + invoice.info.total}</td>
                                 <td className="invoice-table__row" onClick={() =>  setInvoice(invoice)}><Button variant="primary" type="submit" className="d-block w-100">Edit</Button></td>
                                 <td className="invoice-table__row" onClick={() =>  dispatch(removeInvoice(invoice.id))}><Button variant="primary" type="submit" className="d-block w-100">Delete</Button></td>
-                            </tr>
+                                                            </tr>
                         )
                     })}
                 </tbody>
