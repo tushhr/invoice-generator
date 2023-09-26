@@ -25,18 +25,6 @@ export const INVOICE_TABLE_HEADERS = [
         title: "Total Amount",
         icon: "fa-chevron-down",
     },
-    {
-        title: "",
-        icon: "",
-    },
-    {
-        title: "",
-        icon: "",
-    },
-    {
-        title: "",
-        icon: "",
-    }
 ]
 
 export const TABLE_HEADER_TO_INVOICE_KEY = {

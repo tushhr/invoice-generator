@@ -111,7 +111,6 @@ hr {
   background-color: #ffffff;
   border-radius: 0.756rem;
   outline: 0.1rem solid rgba(0,0,0,.125);
-  overflow: hidden;
   margin-top: 2.25rem;
 }
 
@@ -138,6 +137,56 @@ hr {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.table-dropdown {
+  overflow: visible;
+}
+
+@media screen and (max-width: 1280px) {
+  .container {
+    max-width: 76.8rem;
+  }
+  .invoice-table__row {
+    padding: 1rem 0.6rem;
+    max-width: 6rem;
+  }
+
+  .invoice-table__col-head {
+    padding: 1rem 0.6rem;
+  }
+}
+
+.show-in-mobile {
+  display: none;
+}
+
+.hide-in-mobile.td {
+  display: table-cell;
+}
+
+@media screen and (max-width: 768px) {
+  .show-in-mobile {
+    display: block;
+  }
+
+  .hide-in-mobile {
+    display: none;
+  }
+
+  .invoice-table__col-head:nth-child(5) {
+    display: none;
+  }
+
+  .invoice-table__row:nth-child(5) {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .invoice-table__col-head i {
+    display: none;
+  }  
 }
 
 .invoice-table__row--active {
