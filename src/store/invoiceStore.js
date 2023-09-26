@@ -22,9 +22,12 @@ const invoiceSlice = createSlice({
         updateInvoice(state, action) {
             const index = state.invoiceList.findIndex(invoice => invoice.id === action.payload.id)
             state.invoiceList[index] = action.payload
+        },
+        clearInvoiceList(state) {
+            state.invoiceList = []
         }
     }
 })
 
-export const { loadInvoice, addInvoice, removeInvoice, updateInvoice } = invoiceSlice.actions;
+export const { loadInvoice, addInvoice, removeInvoice, updateInvoice, clearInvoiceList } = invoiceSlice.actions;
 export default invoiceSlice.reducer;

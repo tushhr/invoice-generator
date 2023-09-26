@@ -18,3 +18,11 @@ export const fetchFromLocalStorage = () => {
         console.log("Some error occured while fetching from local storage", error)
     }
 }
+
+export const clearLocalStorage = () => {
+    try {
+        localStorage.removeItem(INVOICE_STORE_KEY)
+    } catch (error) {
+        console.log("Some error occured while clearing local storage", error)
+    }
+}

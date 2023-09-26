@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from 'react-bootstrap/Button';
 
-import { removeInvoice, copyInvoice } from "../store/invoiceStore";
+import { removeInvoice, clearInvoiceList } from "../store/invoiceStore";
+import { clearLocalStorage } from "../utils/localStorage";
 import InvoiceForm from "./InvoiceForm";
 
 export default function Home() {
@@ -57,21 +58,18 @@ export default function Home() {
     const sortByInt = (array, name) => {
         const key = nameToKey[name]
         const newInvoiceList = [...array].sort((a, b) =>  a.info[key] - b.info[key]);
-
         return newInvoiceList
     }
 
     const sortByString = (array, name) => {
         const key = nameToKey[name]
         const newInvoiceList = [...array].sort((a, b) => a.info[key].localeCompare(b.info[key]));
-
         return newInvoiceList;
     }
 
     const sortByDate = (array, name) => {
         const key = nameToKey[name]
         const newInvoiceList = [...array].sort((a, b) => new Date(a.info[key]) - new Date(b.info[key]));
-        console.log(newInvoiceList)
         return newInvoiceList
     }
 
@@ -109,18 +107,26 @@ export default function Home() {
         setInvoice(newInvoice)
     }
 
+    const clearInvoiceStore = () =>{
+        clearLocalStorage();
+        dispatch(clearInvoiceList())
+    }
+
     useEffect(() => {
         setInvoiceList(invoiceListStore)
     }, [invoiceListStore])
 
     return (
         <div>
+          <div className="ribbon">We save your data in your browser, please <button className="clear-button" onClick={() => clearInvoiceStore()}>Click here</button> to clear the storage.</div>
             <div className="header">
                 <Button variant="primary" type="submit" className="d-block" onClick={() => setInvoice(-1)}>Create a New Invoice</Button>
                 {invoice && <Button variant="primary" type="submit" className="d-block" onClick={() => setInvoice(null)}>Home</Button>}
             </div>
             { !invoice && 
-                <table className="invoice-table">
+                <>
+                {
+                    invoiceList.length ? <table className="invoice-table">
                 <thead>
                     <tr>
                         {tableHeader.map((header, index) => 
@@ -147,7 +153,11 @@ export default function Home() {
                         )
                     })}
                 </tbody>
-                </table>
+                    </table>
+                    :
+                    <div className="no-invoice invoice-table">No Invoice Found</div>
+                }
+                </>
             }
             {/* If invoice is -1 i.e we are creating a new Invoice Form from the Button "Create New Invoice" */}
             {invoice === -1 ? <InvoiceForm key="newInvoice" setInvoice={setInvoice} /> : invoice && <InvoiceForm {...invoice} key="editInvoice" updateInvoice = {true} setInvoice={setInvoice} />}

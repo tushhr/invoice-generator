@@ -165,3 +165,38 @@ hr {
     margin-left: 28%;
   }
 }
+
+.ribbon {
+  transform: translateY(-2.5rem);
+  width: 100%;
+  border-spacing: 0;
+  background-color: #ffffff;
+  border-radius: 0.756rem;
+  outline: 0.1rem solid rgba(0,0,0,.125);
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.clear-button {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-decoration: underline;
+  color: #0b5ed7;
+}
+
+.no-invoice {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  min-height: 30rem;
+  width: 100%;
+  border-spacing: 0;
+  background-color: #ffffff;
+  border-radius: 0.756rem;
+  outline: 0.1rem solid rgba(0,0,0,.125);
+  overflow: hidden;
+  margin-top: 2.25rem;
+}
