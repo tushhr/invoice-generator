@@ -40,14 +40,14 @@ export default function Home() {
     const handleSorting = (index, sortOrder) => {
         const colHeader = tableHeader[index].title.toLowerCase()
         const key = nameToKey[colHeader]
-        let newInvoiceList = invoiceList;
+        let newInvoiceList = [...invoiceList];
 
-        if(colHeader in INT_FIELD_COLOUMNS) {
-            newInvoiceList = sortByInt(invoiceList, key)
-        } else if(colHeader in STRING_FIELD_COLOUMNS) {
-            newInvoiceList = sortByString(invoiceList, key)
-        } else if(colHeader in DATE_FIELD_COLOUMNS) {
-            newInvoiceList = sortByDate(invoiceList, key)
+        if(INT_FIELD_COLOUMNS.has(colHeader)) {
+            newInvoiceList = sortByInt(newInvoiceList, key)
+        } else if(STRING_FIELD_COLOUMNS.has(colHeader)){
+            newInvoiceList = sortByString(newInvoiceList, key)
+        } else if(DATE_FIELD_COLOUMNS.has(colHeader)) {
+            newInvoiceList = sortByDate(newInvoiceList, key)
         }
 
         sortOrder === 1 ? setInvoiceList(newInvoiceList) : setInvoiceList(newInvoiceList.reverse());

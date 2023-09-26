@@ -47,6 +47,6 @@ export const TABLE_HEADER_TO_INVOICE_KEY = {
     'total amount': 'total',
 }
 
-export const INT_FIELD_COLOUMNS = ['invoice', 'total amount']
-export const STRING_FIELD_COLOUMNS = ['from', 'to']
-export const DATE_FIELD_COLOUMNS = ['date']
+export const INT_FIELD_COLOUMNS = new Set(['invoice', 'total amount'])
+export const STRING_FIELD_COLOUMNS = new Set(['from', 'to'])
+export const DATE_FIELD_COLOUMNS = new Set(['date'])

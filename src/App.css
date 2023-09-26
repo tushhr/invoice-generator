@@ -43,7 +43,7 @@ html,
 }
 
 .modal-content {
-  /* position: inherit; */
+  position: initial;
 }
 
 .spinner-wrapper {
@@ -147,23 +147,11 @@ hr {
 
 .toast {
   top: 4%;
-  margin-left: 40%;
+  margin-left: 110%;
   position: absolute;
   color: rgba(255, 255, 255, 1);
   font-weight: 500;
   background-color: #ff0000;
-}
-
-@media screen and (max-width: 1256px) {
-  .toast {
-    margin-left: 50%;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .toast {
-    margin-left: 28%;
-  }
 }
 
 .ribbon {
