@@ -29,21 +29,38 @@ class InvoiceModal extends React.Component {
   }
   
   UpdateInvoice = () => {
-    this.props.updateInvoice({
-      id: this.props.id,
-      info: this.props.info, 
-      items: this.props.items,
-      currency: this.props.currency,
-      total: this.props.total,
-      subtotal: this.props.subTotal, 
-      taxAmmount: this.props.taxAmmount, 
-      discountAmmount: this.props.discountAmmount,
-      updateModal: this.props.updateModal,
-    })
+    const isValidData = this.validateData()
+    if(isValidData) {
+      this.props.updateInvoice({
+        id: this.props.id,
+        info: this.props.info, 
+        items: this.props.items,
+        currency: this.props.currency,
+        total: this.props.total,
+        subtotal: this.props.subTotal, 
+        taxAmmount: this.props.taxAmmount, 
+        discountAmmount: this.props.discountAmmount,
+        updateModal: this.props.updateModal,
+      })
+      this.setState({loader: true})
+
+      setTimeout(() => {
+        this.props.onComplete(null)
+      }, 1000)
+
+    } else {
+      this.setState({
+        toast: {
+          show: true,
+          variant: 'danger',
+          text: 'Some error occured, possibly redundant invoice number or no invoice',
+        }
+      })
+    }
   }
 
   validateData = () => {
-    return ! this.props.invoiceList.some(invoice => invoice.info.invoiceNumber === this.props.info.invoiceNumber)
+    return !this.props.invoiceList.some(invoice => invoice.info.invoiceNumber === this.props.info.invoiceNumber) ?? this.props.info.invoiceNumber 
   }
 
   GenerateInvoice = () => {
@@ -90,7 +107,7 @@ class InvoiceModal extends React.Component {
         toast: {
           show: true,
           variant: 'danger',
-          text: 'Invoice Number already exists',
+          text: 'Some error occured, possibly redundant invoice number or no invoice',
         }
       })
     }

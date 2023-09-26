@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Button from 'react-bootstrap/Button';
 
-import { removeInvoice } from "../store/invoiceStore";
+import { removeInvoice, copyInvoice } from "../store/invoiceStore";
 import InvoiceForm from "./InvoiceForm";
 
 export default function Home() {
@@ -30,7 +30,11 @@ export default function Home() {
             title: "Total Amount",
             icon: "fa-chevron-down",
         },
-                {
+        {
+            title: "",
+            icon: "",
+        },
+        {
             title: "",
             icon: "",
         },
@@ -98,6 +102,13 @@ export default function Home() {
         setTableHeader(newTableHeader)
     }
 
+    const handleCopy = (invoice) => {
+        const newInvoice = {...invoice}
+        newInvoice.info = {...invoice.info}
+        newInvoice.info.invoiceNumber = undefined
+        setInvoice(newInvoice)
+    }
+
     useEffect(() => {
         setInvoiceList(invoiceListStore)
     }, [invoiceListStore])
@@ -131,14 +142,15 @@ export default function Home() {
                                 <td className="invoice-table__row">{invoice.currency + invoice.info.total}</td>
                                 <td className="invoice-table__row" onClick={() =>  setInvoice(invoice)}><Button variant="primary" type="submit" className="d-block w-100">Edit</Button></td>
                                 <td className="invoice-table__row" onClick={() =>  dispatch(removeInvoice(invoice.id))}><Button variant="primary" type="submit" className="d-block w-100">Delete</Button></td>
-                                                            </tr>
+                                <td className="invoice-table__row" onClick={() =>  handleCopy(invoice)}><Button variant="primary" type="submit" className="d-block w-100">Copy</Button></td>
+                            </tr>
                         )
                     })}
                 </tbody>
                 </table>
             }
             {/* If invoice is -1 i.e we are creating a new Invoice Form from the Button "Create New Invoice" */}
-            {invoice === -1 ? <InvoiceForm key="newInvoice" setInvoice={setInvoice} /> : invoice && <InvoiceForm {...invoice} key="editInvoice" updateInvoice = {true} />}
+            {invoice === -1 ? <InvoiceForm key="newInvoice" setInvoice={setInvoice} /> : invoice && <InvoiceForm {...invoice} key="editInvoice" updateInvoice = {true} setInvoice={setInvoice} />}
         </div>
     )
 }
