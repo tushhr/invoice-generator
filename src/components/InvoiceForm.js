@@ -9,6 +9,8 @@ import InvoiceItem from './InvoiceItem';
 import InvoiceModal from './InvoiceModal';
 import InputGroup from 'react-bootstrap/InputGroup';
 
+import { INVOICE_ACTIONS } from "../utils/constant";
+
 class InvoiceForm extends React.Component {
   constructor(props) {
     super(props);
@@ -44,7 +46,7 @@ class InvoiceForm extends React.Component {
         quantity: 1
       }
     ];
-    this.state.updateInvoice = this.props.updateInvoice ?? false;
+    this.state.invoiceAction = this.props.invoiceAction ?? INVOICE_ACTIONS.NEW_INVOICE;
     this.state.id = this.props.id ?? null;
     this.editField = this.editField.bind(this);
   }
@@ -221,7 +223,7 @@ class InvoiceForm extends React.Component {
               taxAmmount={this.state.taxAmmount}
               discountAmmount={this.state.discountAmmount} 
               total={this.state.total}
-              updateModal={this.state.updateInvoice}
+              invoiceAction={this.state.invoiceAction}
             />
             <Form.Group className="mb-3">
               <Form.Label className="fw-bold">Currency:</Form.Label>

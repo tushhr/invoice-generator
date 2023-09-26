@@ -13,7 +13,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf'
 import { connect } from "react-redux";
 import { addInvoice, updateInvoice } from "../store/invoiceStore";
-
+import { INVOICE_ACTIONS } from "../utils/constant";
 
 class InvoiceModal extends React.Component {
   constructor(props) {
@@ -28,89 +28,85 @@ class InvoiceModal extends React.Component {
     }
   }
   
-  UpdateInvoice = () => {
-    const isValidData = this.validateData()
-    if(isValidData) {
-      this.props.updateInvoice({
-        id: this.props.id,
-        info: this.props.info, 
-        items: this.props.items,
-        currency: this.props.currency,
-        total: this.props.total,
-        subtotal: this.props.subTotal, 
-        taxAmmount: this.props.taxAmmount, 
-        discountAmmount: this.props.discountAmmount,
-        updateModal: this.props.updateModal,
-      })
-      this.setState({loader: true})
-
-      setTimeout(() => {
-        this.props.onComplete(null)
-      }, 1000)
-
-    } else {
-      this.setState({
-        toast: {
-          show: true,
-          variant: 'danger',
-          text: 'Some error occured, possibly redundant invoice number or no invoice',
-        }
-      })
-    }
-  }
-
   validateData = () => {
     return !this.props.invoiceList.some(invoice => invoice.info.invoiceNumber === this.props.info.invoiceNumber) ?? this.props.info.invoiceNumber 
   }
 
+  updateInvoice = () => {
+    this.props.updateInvoice({
+      id: this.props.id,
+      info: this.props.info, 
+      items: this.props.items,
+      currency: this.props.currency,
+      total: this.props.total,
+      subtotal: this.props.subTotal, 
+      taxAmmount: this.props.taxAmmount, 
+      discountAmmount: this.props.discountAmmount,
+      updateModal: this.props.updateModal,
+    })
+  }
+
+  generateNewInvoice = () => {
+    this.props.addInvoice({
+      info: this.props.info, 
+      items: this.props.items,
+      currency: this.props.currency,
+      total: this.props.total,
+      subtotal: this.props.subTotal, 
+      taxAmmount: this.props.taxAmmount, 
+      discountAmmount: this.props.discountAmmount,
+      updateModal: this.props.updateModal,
+    })
+  }
+
   GenerateInvoice = () => {
     const isValidData = this.validateData()
-    if(isValidData) {
-      this.setState({
-        toast: {
-          show: true,
-          variant: 'Success',
-          text: 'Inovice Generated Successfully',
-        }
-      })
-      this.props.addInvoice({
-        info: this.props.info, 
-        items: this.props.items,
-        currency: this.props.currency,
-        total: this.props.total,
-        subtotal: this.props.subTotal, 
-        taxAmmount: this.props.taxAmmount, 
-        discountAmmount: this.props.discountAmmount,
-        updateModal: this.props.updateModal,
-      })
-      this.setState({loader: true})
 
-      setTimeout(() => {
-        this.props.onComplete(null)
-      }, 1000)
-      // html2canvas(document.querySelector("#invoiceCapture")).then((canvas) => {
-      //   const imgData = canvas.toDataURL('image/png', 1.0);
-      //   const pdf = new jsPDF({
-      //     orientation: 'portrait',
-      //     unit: 'pt',
-      //     format: [612, 792]
-      //   });
-      //   pdf.internal.scaleFactor = 1;
-      //   const imgProps= pdf.getImageProperties(imgData);
-      //   const pdfWidth = pdf.internal.pageSize.getWidth();
-      //   const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      //   pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      //   pdf.save('invoice-001.pdf');
-      // });
-    } else {
+    if(!isValidData) {
       this.setState({
         toast: {
           show: true,
           variant: 'danger',
-          text: 'Some error occured, possibly redundant invoice number or no invoice',
+          text: 'Some error occured, possibly redundant invoice number or no invoice number',
         }
       })
     }
+
+    if(this.props.invoiceAction === INVOICE_ACTIONS.NEW_INVOICE) {
+      this.generateNewInvoice()
+    } else if(this.props.invoiceAction === INVOICE_ACTIONS.EDIT_INVOICE) {
+      this.updateInvoice()
+    } else if(this.props.invoiceAction === INVOICE_ACTIONS.COPY_INVOICE) {
+      this.generateNewInvoice()
+    }
+
+    this.setState({
+      toast: {
+        show: true,
+        variant: 'Success',
+        text: 'Inovice Generated Successfully',
+      }
+    })
+
+    this.setState({loader: true})
+    setTimeout(() => {
+      this.props.onComplete(null)
+    }, 1000)
+    
+    html2canvas(document.querySelector("#invoiceCapture")).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png', 1.0);
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: [612, 792]
+      });
+      pdf.internal.scaleFactor = 1;
+      const imgProps= pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('invoice-001.pdf');
+    });
   }
 
   render() {
@@ -230,18 +226,9 @@ class InvoiceModal extends React.Component {
             <div className="pb-4 px-4">
                 <Row>
                   <Col md={6}>
-                    {
-                      this.props.updateModal && 
-                      <Button variant="primary" className="d-block w-100" onClick={this.UpdateInvoice}>
-                        <BiPaperPlane style={{width: '15px', height: '15px', marginTop: '-3px'}} className="me-2"/>Update the Invoice
-                      </Button>
-                    }
-                    {
-                      !this.props.updateModal && 
-                      <Button variant="primary" className="d-block w-100" onClick={this.GenerateInvoice}>
-                        <BiPaperPlane style={{width: '15px', height: '15px', marginTop: '-3px'}} className="me-2"/>Send Invoice
-                      </Button>
-                    }
+                    <Button variant="primary" className="d-block w-100" onClick={this.GenerateInvoice}>
+                      <BiPaperPlane style={{width: '15px', height: '15px', marginTop: '-3px'}} className="me-2"/>Send Invoice
+                    </Button>
                   </Col>
                   <Col md={6}>
                     <Button variant="outline-primary" className="d-block w-100 mt-3 mt-md-0" onClick={this.GenerateInvoice}>

@@ -4,12 +4,15 @@ import Button from 'react-bootstrap/Button';
 
 import { removeInvoice, clearInvoiceList } from "../store/invoiceStore";
 import { clearLocalStorage } from "../utils/localStorage";
+import { INVOICE_ACTIONS } from "../utils/constant";
 import InvoiceForm from "./InvoiceForm";
 
 export default function Home() {
     const invoiceListStore = useSelector(store => store.invoice.invoiceList)
+
     const [invoiceList, setInvoiceList] = useState(invoiceListStore)
     const [invoice, setInvoice] = useState(null)
+    const [invoiceAction, setInvoiceAction] = useState(INVOICE_ACTIONS.NEW_INVOICE)
     const [tableHeader, setTableHeader] = useState([
         {
             title: "Invoice",
@@ -104,6 +107,8 @@ export default function Home() {
         const newInvoice = {...invoice}
         newInvoice.info = {...invoice.info}
         newInvoice.info.invoiceNumber = undefined
+
+        setInvoiceAction(INVOICE_ACTIONS.COPY_INVOICE)
         setInvoice(newInvoice)
     }
 
@@ -120,7 +125,7 @@ export default function Home() {
         <div>
           <div className="ribbon">We save your data in your browser, please <button className="clear-button" onClick={() => clearInvoiceStore()}>Click here</button> to clear the storage.</div>
             <div className="header">
-                <Button variant="primary" type="submit" className="d-block" onClick={() => setInvoice(-1)}>Create a New Invoice</Button>
+                <Button variant="primary" type="submit" className="d-block" onClick={() => { setInvoiceAction(INVOICE_ACTIONS.NEW_INVOICE); setInvoice({})}}>Create a New Invoice</Button>
                 {invoice && <Button variant="primary" type="submit" className="d-block" onClick={() => setInvoice(null)}>Home</Button>}
             </div>
             { !invoice && 
@@ -146,9 +151,9 @@ export default function Home() {
                                 <td className="invoice-table__row">{invoice.info.billTo}</td>
                                 <td className="invoice-table__row">{invoice.info.dateOfIssue}</td>
                                 <td className="invoice-table__row">{invoice.currency + invoice.info.total}</td>
-                                <td className="invoice-table__row" onClick={() =>  setInvoice(invoice)}><Button variant="primary" type="submit" className="d-block w-100">Edit</Button></td>
-                                <td className="invoice-table__row" onClick={() =>  dispatch(removeInvoice(invoice.id))}><Button variant="primary" type="submit" className="d-block w-100">Delete</Button></td>
                                 <td className="invoice-table__row" onClick={() =>  handleCopy(invoice)}><Button variant="primary" type="submit" className="d-block w-100">Copy</Button></td>
+                                <td className="invoice-table__row" onClick={() =>  { setInvoice(invoice); setInvoiceAction(INVOICE_ACTIONS.EDIT_INVOICE)}}><Button variant="primary" type="submit" className="d-block w-100">Edit</Button></td>
+                                <td className="invoice-table__row" onClick={() =>  dispatch(removeInvoice(invoice.id))}><Button variant="primary" type="submit" className="d-block w-100">Delete</Button></td>
                             </tr>
                         )
                     })}
@@ -159,8 +164,7 @@ export default function Home() {
                 }
                 </>
             }
-            {/* If invoice is -1 i.e we are creating a new Invoice Form from the Button "Create New Invoice" */}
-            {invoice === -1 ? <InvoiceForm key="newInvoice" setInvoice={setInvoice} /> : invoice && <InvoiceForm {...invoice} key="editInvoice" updateInvoice = {true} setInvoice={setInvoice} />}
+            { invoice && <InvoiceForm {...invoice} key={invoiceAction} invoiceAction={invoiceAction} setInvoice={setInvoice} /> }
         </div>
     )
 }
