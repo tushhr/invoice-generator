@@ -69,6 +69,7 @@ export default function Home() {
     const handleCopy = (invoice) => {
         const newInvoice = {...invoice}
         newInvoice.info = {...invoice.info}
+        newInvoice.id = undefined
         newInvoice.info.invoiceNumber = undefined
 
         setInvoiceAction(INVOICE_ACTIONS.COPY_INVOICE)

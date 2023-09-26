@@ -29,7 +29,7 @@ class InvoiceModal extends React.Component {
   }
   
   validateData = () => {
-    return !this.props.invoiceList.some(invoice => invoice.info.invoiceNumber === this.props.info.invoiceNumber) ?? this.props.info.invoiceNumber 
+    return !this.props.invoiceList.some(invoice => invoice.info.invoiceNumber === this.props.info.invoiceNumber && invoice.id != this.props.id) && !(this.props.info.invoiceNumber == undefined) 
   }
 
   updateInvoice = () => {
@@ -118,7 +118,7 @@ class InvoiceModal extends React.Component {
             bg={this.state.toast.variant.toLowerCase()}
             onClose={() => this.setState({toast:{...this.state.toast, show:false}})}
             show={this.state.toast.show}
-            delay={3000}
+            delay={1000}
             autohide
           >
             <Toast.Body>{this.state.toast.text}</Toast.Body>
