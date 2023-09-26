@@ -42,6 +42,17 @@ html,
   border-radius: 0.756rem
 }
 
+.modal-content {
+  /* position: inherit; */
+}
+
+.spinner-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 24rem;
+}
+
 hr {
   opacity: 0.1
 }
@@ -128,4 +139,25 @@ hr {
 .invoice-table__row--active {
   color: #0b5ed7;
   font-weight: 500;
+}
+
+.toast {
+  top: 4%;
+  margin-left: 40%;
+  position: absolute;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 500;
+  background-color: #ff0000;
+}
+
+@media screen and (max-width: 1256px) {
+  .toast {
+    margin-left: 50%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .toast {
+    margin-left: 28%;
+  }
 }
