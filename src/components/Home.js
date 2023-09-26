@@ -100,7 +100,7 @@ export default function Home() {
                             <thead>
                                 <tr>
                                     {tableHeader.map((header, index) => 
-                                        <th className="invoice-table__col-head invoice-table__col-head--left-align">
+                                        <th key={index} className="invoice-table__col-head invoice-table__col-head--left-align">
                                             {header.title}
                                             <i className={"fa " + header.icon} onClick={() => handleSortingClick(index)}></i>
                                         </th>
@@ -122,16 +122,18 @@ export default function Home() {
                                             <td className="invoice-table__row hide-in-mobile" onClick={() =>  handleCopy(invoice)}><Button variant="primary" type="submit" className="d-block w-100">Copy</Button></td>
                                             <td className="invoice-table__row hide-in-mobile" onClick={() =>  { setInvoice(invoice); setInvoiceAction(INVOICE_ACTIONS.EDIT_INVOICE)}}><Button variant="primary" type="submit" className="d-block w-100">Edit</Button></td>
                                             <td className="invoice-table__row hide-in-mobile" onClick={() =>  dispatch(removeInvoice(invoice.id))}><Button variant="primary" type="submit" className="d-block w-100">Delete</Button></td>
-                                            <Dropdown className="invoice-table__row table-dropdown show-in-mobile">
-                                                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                                </Dropdown.Toggle>
+                                            <td>
+                                                <Dropdown className="invoice-table__row table-dropdown show-in-mobile">
+                                                    <Dropdown.Toggle id="dropdown-basic">
+                                                    </Dropdown.Toggle>
 
-                                                <Dropdown.Menu>
-                                                    <Dropdown.Item onClick={() =>  handleCopy(invoice)}>Copy</Dropdown.Item>
-                                                    <Dropdown.Item onClick={() =>  { setInvoice(invoice); setInvoiceAction(INVOICE_ACTIONS.EDIT_INVOICE)}}>Edit</Dropdown.Item>
-                                                    <Dropdown.Item onClick={() =>  dispatch(removeInvoice(invoice.id))}>Delete</Dropdown.Item>
-                                                </Dropdown.Menu>
-                                            </Dropdown>
+                                                    <Dropdown.Menu>
+                                                        <Dropdown.Item onClick={() =>  handleCopy(invoice)}>Copy</Dropdown.Item>
+                                                        <Dropdown.Item onClick={() =>  { setInvoice(invoice); setInvoiceAction(INVOICE_ACTIONS.EDIT_INVOICE)}}>Edit</Dropdown.Item>
+                                                        <Dropdown.Item onClick={() =>  dispatch(removeInvoice(invoice.id))}>Delete</Dropdown.Item>
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
+                                            </td>
                                         </tr>
                                     )
                                 })}
