@@ -212,6 +212,7 @@ class InvoiceForm extends React.Component {
             <InvoiceModal 
               id = {this.state.id}
               showModal={this.state.isOpen}
+              onComplete={this.props.setInvoice}
               closeModal={this.closeModal}
               info={this.state}
               items={this.state.items}
