@@ -1,10 +1,20 @@
 # Invoice Generator - React App
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![](https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
+
 
 An Invoice creator project built with React. Add itemized items, configure quantity, prices, tax rates and discounts. Download Invoice as PDFs to your device. Uses [jspdf-react](https://www.npmjs.com/package/jspdf-react) to capture the data from the modal and covert it from canvas -> pdf.
 
+## What's New?
+
+- You can also add Multiple Invoices, can update old generated Invoices.
+- You can copy any old invoices - saving your time.
+- Delete the Invoices you no longer needed.
+
+<br>
+
+PS: No information is sent from your desktop, the magic happens in the browser!
+
 ### Live Demo
-https://invoice-generator-react.netlify.app/
+https://tushhr.me/#/invoice-generator
 
 ### Screenshots
 <img src="https://i.imgur.com/wRetnxk.png" style="max-width: 100px; width: 100%; height: auto;">
@@ -14,23 +24,19 @@ https://invoice-generator-react.netlify.app/
 ### Installation
 
 ```
-git clone https://github.com/johnuberbacher/invoice-generator
+git clone https://github.com/tushhr/invoice-generator
 
 npm install
 
-npm start / npm run build
+npm start
 ```
 
-### To-Do
-- [x] Finish parsing data into Preview Modal
+<br>
 
-- [x] Currency Picker
-
-- [x] Calculate Tax and Discounts
-
-- [ ] Store invoices in Firebase DB
-
-
-### Meta
+## This project was initially developed by
 
 John Uberbacher – [johnuberbacher.com](https://johnuberbacher.com)
+
+### And updated by 
+
+Tushar Maheshwari - [tushhr.me](https://tushhr.me)
